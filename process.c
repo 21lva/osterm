@@ -2,34 +2,34 @@
 #include <time.h>
 #include <stdlib.h>
 
-#define USECPU 1
-#define USEIO 0
-#define CPUBT_RANGE 10
-#define IOBT_RANGE 10
-#define ARRIVALT_RANGE 10
-#define PRIORITY_RANGE 10
-#define rrandom(X) ((rand()%(X))+1)//return random number from 1 to X
 
 srand(time(NULL));
 
-typedef struct _process{
-	int processID;
-	int cpuBT;//cpu burst time
-	int IOBT;//I/O burst time
-	int arrivalT;//arrival time;
-	int priority;//priority
-}process;
-
-process* make_process(){
+process* make_process(int Is_random){
 	static int pidDist=0;//process id will be distributed as auto increment
 	process* newp = (process*)malloc(sizeof(process)*1);
+	if(Is_random){
+	newp->processID=++pidDist;
+	newp->cpuBT = rrandom(CPUBT_RANGE);
+	newp->IOBT = rrandom(IOBT_RANGE);
+	newp->arrivalT = rrandom(ARRIVALT_RANGE);
+	newp->priority = rrandom(PRIORITY_RANGE);
 	
-	newp.processID=++pidDist;
-	newp.cpuBT = rrandom(CPUBT_RANGE);
-	newp.IOBT = rrandom(IOBT_RANGE);
-	newp.arrivalT = rrandom(ARRIVALT_RANGE);
-	newp.priority = rrandom(PRIORITY_RANGE);
-	
+	make_queue(newp,Is_random);
+			}
+	else{
+		newp->processID=++pidDist;
+		printf("insert cpu burst time : ");
+		scanf("%d",&(newp->cpuBT));
+		printf("insert I/O burst time : ");
+		scanf("%d",&(newp->IOBT));
+		printf("insert arrival time : ");
+		scanf("%d",&(newp->arrivalT));
+		printf("insert priority : ");
+		scanf("%d",&(newp->priority));
+
+		make_queue(newp,Is_random);
+	}
 	return newp;
 }
 
