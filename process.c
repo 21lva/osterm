@@ -15,7 +15,7 @@ process* make_process(int Is_random){
 	newp->arrivalT = rrandom(ARRIVALT_RANGE);
 	newp->priority = rrandom(PRIORITY_RANGE);
 	
-	make_queue(newp,Is_random);
+	make_queue(newp->turnqueue,newp->cpuBT,newp->IOBT,Is_random);
 			}
 	else{
 		newp->processID=++pidDist;
@@ -28,7 +28,7 @@ process* make_process(int Is_random){
 		printf("insert priority : ");
 		scanf("%d",&(newp->priority));
 
-		make_queue(newp,Is_random);
+		make_queue(newp->turnqueue,newp->cpuBT,newp->IOBT,Is_random);
 	}
 	return newp;
 }

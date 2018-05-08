@@ -11,7 +11,7 @@ queue* init(int type,int time);
 void pop(queue* seq);
 queue* first(queue* seq);
 void insert(queue* seq,queue* target);
-void make_queue(int Is_random);
+void make_queue(queue* root,int cpuBT,int IOBT,int Is_random);
 
 
 #endif
