@@ -1,0 +1,29 @@
+heap1 : sorted in order of getting time (first getting time == arrival time)
+heap2 : sorted in order of priority if it is primary algorithm
+running : a element running now in CPU
+finished : a stack of processes finished
+
+for i from 0 to infinite:
+	repeat:
+		if getting time of first element of heap1 > i: break
+		otherwise pop first elemnt of heap1 and insert this to heap2
+	while true:
+	if running has finished its job
+		finished tiem of the process <-- i-1
+		if running has not finihsed I/O burst time
+			finished time of the process += I/O burst time
+		move running into finished
+		running <-- heap2's first element
+	if running has been interrupted due to its I/O operation
+		getting time of running <-- i + I/O operation burst time
+		insert running into heap1
+		running <-- heaps2's first element
+	if running's priority < priority of first element of heap2
+		getting time of running <-- i
+		insert running into heap1
+		running <-- heap2's first element
+	if there is no running and heap1, heap2 are empty
+		finish iteration
+			
+
+	

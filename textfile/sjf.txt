@@ -1,0 +1,50 @@
+heap1 : sorted in order of getting time (first getting time == arrival time)
+heap2 : sorted in order of priority if it is primary algorithm
+running : a element running now in CPU
+finished : a stack of processes finished
+
+
+priority : left cpu burst`
+
+for i from 0 to infinite:
+	repeat
+		if getting time of first element of heap1 > i: break
+		otherwise pop first elemnt of heap1 and insert the element into heap2
+	while true
+
+	if running has finished its job
+		finished time of the process <-- i
+		if running has not finihsed I/O burst time
+			finished time of the process += I/O burst time
+		move running into finished
+		if heap2 is not empty
+			running <-- heap2's first element
+			running's start time <-- i
+
+	if running has been interrupted due to its I/O operation
+		getting time of running <-- i + I/O operation burst time
+		reduce left cpu time and left I/O time by using index
+		index +=2
+		insert running into heap1
+		if heap2 is not empty
+			running <-- heaps2's first element
+			running's start time <-- i
+	
+	// this is for preemptive. If it is orginal SJF(not preemptive), then the "if~~~"must not be used
+	if running's priority < priority of first element of heap2
+		getting time of running <-- i
+		left cpu time -= i - running's start time
+		jobs[index] -= i - running's start time
+		insert running into heap1
+		if heap2 is not empty
+			running <-- heap2's first element
+			running's start time <-- i
+
+	if there is no running and heap1, heap2 are empty
+		finish iteration
+
+	if there is no running
+		increas one of idle time
+			
+
+	

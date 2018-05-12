@@ -1,0 +1,29 @@
+heap1 : sorted in order of getting time (first getting time == arrival time)
+running : a process running now in CPU
+finished : a stack of processes finished 
+
+for i from 0 to infinite:
+	
+	if running has finished its job
+		finished time of the process <-- i-1
+		if running has not finished I/O burst time
+			finished time of the process += I/O burst time
+		move running into finished
+		if getting time of first element of heap1 <= i
+			running <-- heap1's first element
+			running's start time <-- i
+
+	if running has been interrupted due to its I/O operation
+		getting time of running <-- i + I/O operation burst time
+		insert running into heap1
+		if getting time of first element of heap1 <= i
+			running <-- heap1's first element
+			running's start time <-- i
+
+	if there is no running and heap1, heap2 are empty
+		finish iteration
+
+	if there is no running
+		idle time += 1
+			
+

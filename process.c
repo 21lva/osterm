@@ -5,6 +5,60 @@
 
 srand(time(NULL));
 
+void make_turn(int** target,int Is_random,int cputime,int iotime){
+	int tmpcpu=cputime,tmpio=iotime;//variables used to check how much time we used for each operation
+	*target = (int*)malloc(sizeof(int)*(cputime+iotime));
+	if(Is_random){
+		//if the turn should be decided randomly
+		//the first operation must cpu operation
+		//although it is just 1 time unit
+		target[0]=rrandom(tmpcpu);
+		tmpcpu-=target[0];
+		int next=1,index=0;
+		while(tmpcpu>0 && tmpio>0){
+			if(next==0){
+				target[index]=rrandom(tmpcpu);
+				tmpcpu-=target[index++];
+				next=1;
+			}
+			else{
+				target[index]=rrandom(tmpio);
+				tmpio-=target[index++];
+				next=0;
+			}
+		}
+		if(tmpcpu>0)target[index++]=tmpcpu;
+		if(tmpio>0)target[index++]=tmpio;
+	}
+	else{
+		int index=0,next=0;
+		while(tmpcpu>0&&tmpio>0){
+			if(next==0){
+				printf("CPU type %dth operation, insert how much?? from 1 to %d : ",index+1,tmpcpu);
+				scanf("%d",&target[index]);
+				if(target[index]<=0||target[index]>tmpcpu){
+					printf("the value must be more than zero and smaller than or equal to %d",tmpcpu);
+					continue;
+				}
+				tmpcpu-=target[index++];
+				next=1;
+			}
+			else{
+				printf("IO type %dth operation, insert how much?? from 1 to %d : ",index+1,tmpio);
+				scanf("%d",&target[index]);
+				if(target[index]<=0||target[index]>tmpio){
+					printf("the value must be more than zero and smaller than or equal to %d",tmpio);
+					continue;
+				}
+				tmpio-=target[index++];
+				next=0;
+			}
+		}
+		if(tmpcpu>0)target[index++]=tmpcpu;
+		if(tmpio>0)target[index++]=tmpio;
+	}
+}
+
 process* make_process(int Is_random){
 	static int pidDist=0;//process id will be distributed as auto increment
 	process* newp = (process*)malloc(sizeof(process)*1);
@@ -14,9 +68,14 @@ process* make_process(int Is_random){
 	newp->IOBT = rrandom(IOBT_RANGE);
 	newp->arrivalT = rrandom(ARRIVALT_RANGE);
 	newp->priority = rrandom(PRIORITY_RANGE);
-	
-	make_queue(newp->turnqueue,newp->cpuBT,newp->IOBT,Is_random);
-			}
+	newp->gettingT = newp->arrivalT;
+
+	newp->CpuIO.NextType=0;
+	newp->CpuIO.Index=0;
+	newp->CpuIO.LeftCpu=newp->cpuBT;
+	newp->CpuIO.LeftIO=newp->IOBT;
+	make_turn(&newp->CpuIO.TurnArray,Is_random,newp->cpuBT,newp->IOBT);
+	}
 	else{
 		newp->processID=++pidDist;
 		printf("insert cpu burst time : ");
@@ -27,23 +86,30 @@ process* make_process(int Is_random){
 		scanf("%d",&(newp->arrivalT));
 		printf("insert priority : ");
 		scanf("%d",&(newp->priority));
-
-		make_queue(newp->turnqueue,newp->cpuBT,newp->IOBT,Is_random);
+		
+		newp->gettingT = newp->arrivalT;
+		newp->CpuIO.NextType=0;
+		newp->CpuIO.Index=0;
+		newp->CpuIO.LeftCpu=newp->cpuBT;
+		newp->CpuIO.LeftIO=newp->IOBT;
+		make_turn(&newp->CpuIO.TurnArray,Is_random,newp->cpuBT,newp->IOBT);
 	}
 	return newp;
 }
 
-process* interrupt_process(process* target,int type,int amount){
-	if(type==USECPU){
-	//using cpu
-		//after cpu operation,if there is interruption, arrival time should be increased because the process should get the ready queue.
-		target->cpuBT-=amount;
-		target->arrivalT+=amount;
+process* interrupt_process(process* target,int bywhom,int time,int startT){
+	if(bywhom==1){
+	//in case of interrupted by a process
+		target->gettingT = time;
+		target->CpuIO.LeftCpu-= (i-startT);
+		target->CpuIO.TurnArray[target->CpuIo.Index] -= (i-startT);
 	}
 	else{
-		//after IO operation, arrival time should be increased because the process should get the ready queue.
-		target->IOBT-=amount;
-		target->arrival+=amount;
+	//If the interruption is due to an I/O operation
+		target->gettingT = time + target->CpuIo.TurnArray[target->CpuIo.Index];
+		target->CpuIO.LeftCpu -= (i-startT);
+		target->CpuIO.LeftIO -= target->CpuIo.TurnArray[target->CpuIO.Index];
+		target->CpuIO.Index+=2;
 	}
 }
 
@@ -52,10 +118,7 @@ void remove_process(process* target){
 }
 
 int Is_finished_process(process* target){
-	//after interrupt, we must check this process is finished or not
-	if(target->cpuBT<=0){
-	//if there is nothing to do on cpu, then we must remove it, even if there is extra time to do in I/O operation. Because the only left I/O operation does not affect to turnaround time and waiting time.
-		remove_process(target);
+	if(target->CpuIO.LeftCpu<=0){
 		return 1;
 	}
 	return 0;

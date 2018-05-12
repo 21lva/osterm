@@ -1,8 +1,9 @@
 #include "heap.h"
 
-heap* init_heap(int key,int size){
+
+heap* init_heap(int kep,int size){
 	heap* new_heap = (heap*)malloc(sizeof(heap)*1);
-	new_heap->key=key;
+	heap->key = key;
 	new_heap->array=(process**)malloc(sizeof(process*)*size);
 	return new_heap;
 }
@@ -21,43 +22,55 @@ void min_idx(int left,int right,int cur,int idx){
 
 }
 
-void downop(heap* root,int idx){
+int getKey(process* target,int key){
+	//smaller -> better
+	if(key==GETTINGT)
+		return target->gettingT;
+	else if(key==PRIORITY)
+		return target->priority;
+	else if(key==LEFTCPU)
+		return target->CpuIO.LeftCpu;
+	else if(key==SLEFTCPU)
+		return target->CpuIO.TurnArray[target->CpuIo.Index];
+}
+
+void downop(heap* root,int idx,int key){
 	int left,right,cur;
 	if(Is_leaf(root,idx))return;
 	else{
-		//****************insert here value 
-		left=root->array[idx*2+1];
-		cur=root->array[idx];
-		//only one child;left
-		if(root->last<=idx*2+2)right=9999999;
-		else right=root->array[idx*2+2];
-		int mini=min_idx(left,right,cur,idx);
-		if(mini==idx)return;
+		//getting key value of each process;
+		left=getKey(root->array[idx*2+1],key);
+		cur=getKey(root->array[idx],key);
+
+		
+		if(root->last<=idx*2+2)right=9999999;//only one child : a left child 
+		else right=getKey(root->array[idx*2+2],key);
+		
+		int mini=min_idx(left,right,cur,idx);//find index of process having minimum key
+		
+		if(mini==idx)return;//nothing to do
 		else{
 			process* tmp=root->array[mini];
 			root->array[mini]=root->array[idx];
 			root->array[idx]=tmp;
-			downop(root,mini);
+			downop(root,mini,key);
 		}
 	}
 }
-void upop(heap* root,int idx){
+void upop(heap* root,int idx,int key){
 	if(idx==0)return;
-	if(root->array[idx] < root->array[(idx-1)/2]){
+	if(getKey(root->array[idx],key) < getKey(root->array[(idx-1)/2],key)){
 		process* tmp=root->array[idx];
 		root->array[idx]=root->array[(idx-1)/2];
 		root->array[(idx-1)/2]=tmp;
-		upop(root,(idx-1)/2);
+		upop(root,(idx-1)/2,key);
 	}
 }
 
 void heap_pop(heap* root){
 	if(root->last==0)return;
-	process* tmp = root->array[0];
 	root->array[0]=root->array[root->last-1];
-		ray
-	free(tmp);
-	downop(root,0);
+	downop(root,0,root->key);
 }
 
 process* heap_first(heap* root){
@@ -66,6 +79,6 @@ process* heap_first(heap* root){
 
 void heap_insert(heap *root,process* newp){
 	root->array[root->last++]=newp;
-	upop(root,last-1);
+	upop(root,last-1,root->key);
 }
 

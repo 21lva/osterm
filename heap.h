@@ -3,10 +3,15 @@
 
 #include "process.h"
 
+#define GETTINGT 1
+#define	PRIORITY 2
+#define LEFTCPU 3
+#define SLEFTCPU 4
+
 typedef _heap{
 	int key;//key value used when sorting
 	process** array;
-	int last;//+1 of last element
+	int last;//+1 of index last element
 }heap;
 
 heap* init_heap(int key,int size);
