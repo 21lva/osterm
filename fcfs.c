@@ -1,4 +1,4 @@
-#include "algorithms:.h"
+#include "algorithms.h"
 
 //The algorithm return total running time 
 Result* FCFSA(process* parray[],int nump){
@@ -14,7 +14,7 @@ Result* FCFSA(process* parray[],int nump){
 	//second, insert all processes in parray into heap
 	ready=init_heap(1,nump);
 	for(time=0;time<nump;time++)heap_insert(ready,parray[time]);
-
+	printf("start");
 	for(time=0;/*infinitely*/;time++){
 		if(running->Process==NULL){
 			idle++;

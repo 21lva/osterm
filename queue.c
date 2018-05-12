@@ -23,7 +23,7 @@ void queue_insert(queue* target,int processID,int startT,int finishedT){
 	newel->next=NULL;
 	target->last=newel;
 }
-void qelemnt_free(qelement* target){
+void qelement_free(qelement* target){
 	target->next=NULL;
 	target->before=NULL;
 	free(target);

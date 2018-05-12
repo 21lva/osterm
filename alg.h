@@ -5,7 +5,9 @@
 #include "process.h"
 #include "stack.h"
 #include "queue.h"
-#include "mainheader.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 
 typedef struct _Running{

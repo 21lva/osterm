@@ -79,7 +79,8 @@ void freeall(Running* running, heap* heap1,heap* heap2){
 }
 
 void checkingList(Result* result,Running* running,int time){
-	if(running->Process==NULL)int pid=-1;
-	else int pid = running->Process->processID;
+	int pid;
+	if(running->Process==NULL) pid=-1;
+	else pid = running->Process->processID;
 	queue_insert(result->list,pid,time,time+1);
 }

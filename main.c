@@ -8,7 +8,7 @@
 #define RR (6)
 
 
-int config(int* IsRandom,int* Alg,int* numP,int* tq){
+void config(int* IsRandom,int* Alg,int* numP,int* tq){
 	printf("Radom process ? Yes(1) or No(0)");
 	scanf("%d",IsRandom);
 	printf("Choose Algorithm\n1. FCFS\n2. non-preemptive SJF\n3. preemptive SJF\n4. non-preemptive priority\n5. preemptive priority\n6. Round Robin\n");
@@ -22,8 +22,9 @@ int config(int* IsRandom,int* Alg,int* numP,int* tq){
 }
 
 int main(){
-	int IsRandom,Alg,numP,tq,i;
+	int IsRandom,Alg,numP,tq=0,i;
 	config(&IsRandom,&Alg,&numP,&tq);
+	printf("Random : %d ,Algorithm : %d , number of process : %d, time quantum : %d",IsRandom,Alg,numP,tq);
 	process** parray = (process**)malloc(sizeof(process*)*numP);
 	for(i=0;i<numP;i++){
 		parray[i]=make_process(IsRandom);
