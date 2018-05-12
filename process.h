@@ -1,18 +1,12 @@
 #ifndef PROCESS_H
 #define PROCESS_H
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
+#include "constants.h"
 
-#define USECPU 1
-#define USEIO 0
-#define CPUBT_RANGE 10
-#define IOBT_RANGE 10
-#define ARRIVALT_RANGE 10
-#define PRIORITY_RANGE 10
-#define rrandom(X) ((rand()%(X))+1)//return random number from 1 to X
-
-#include "queue.h"
-
-
-typedef _turn{
+typedef struct _turn{
 	//a sequence of a process showing what kind of operation is going to be done and how long.
 	int NextType;//Cpu type operation : 0 , IO : 1
 	int *TurnArray;//an array showing time amount of each operation
@@ -21,19 +15,24 @@ typedef _turn{
 	int LeftIO;//total amount of left IO type operation
 }turn;
 
-typedef _process{
+typedef struct _process{
 	int processID;//id of the process
 	int cpuBT;//cpu burst time
 	int IOBT;//I/O operation burst time
 	int arrivalT;//arrival time
 	int gettingT;//getting time: time when the process get in the ready queue. First it is same as arrival time
 	int priority;
+	int finishedT;
 	turn CpuIO;
 }process;
 
 process* make_process(int Is_random);
-process* interrupt_process(process* target,int bywhom,int time,int startT);
+void interrupt_process(process* target,int bywhom,int time);
 void remove_process(process* target);
+void process_free(process* target);
+void _FinishProcess(process* target,int time);
 int Is_finished_process(process* target);
+
+//#include "mainheader.h"
 
 #endif

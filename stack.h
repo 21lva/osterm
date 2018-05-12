@@ -5,7 +5,7 @@
 
 typedef struct _element{
 	process* el;
-	element* next;
+	struct _element* next;
 	
 }element;
 
@@ -13,6 +13,7 @@ typedef struct _stack{
 	element* last;
 }stack;
 
+stack* init_stack();
 void stack_insert(stack* target,process* X);
 void element_free(element* target);
 void stack_pop(stack* target);

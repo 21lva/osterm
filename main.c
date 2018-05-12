@@ -1,11 +1,11 @@
 #include "mainheader.h"
 
-#define FCFS 1
-#define NONP_SJF 2
-#define P_SJF 3
-#define NONP_PRIORITY 4
-#define P_PRIORITY 5
-#define RR 6
+#define FCFS (1)
+#define NONP_SJF (2)
+#define P_SJF (3)
+#define NONP_PRIORITY (4)
+#define P_PRIORITY (5)
+#define RR (6)
 
 
 int config(int* IsRandom,int* Alg,int* numP,int* tq){
@@ -31,17 +31,17 @@ int main(){
 	Result* result=NULL;
 	
 	if(Alg==FCFS)
-		result = FCFS(parray,numP);
+		result = FCFSA(parray,numP);
 	else if(Alg==NONP_SJF)
-		result = SJF(parray,numP,0);
+		result = SJFA(parray,numP,0);
 	else if(Alg=P_SJF)
-		result = SJF(parray,numP,1);
+		result = SJFA(parray,numP,1);
 	else if(Alg=NONP_PRIORITY)
-		result = PRIORITY(parray,numP,0);
+		result = PRIORITYA(parray,numP,0);
 	else if(Alg=P_PRIORITY)
-		result = PRIORITY(parray,numP,1);
+		result = PRIORITYA(parray,numP,1);
 	else if(Alg=RR)
-		result = RR(parray,numP,tq);
+		result = RRA(parray,numP,tq);
 	GanttChart(result);
 	WTTT(result);
 	CpuUtilization(result);

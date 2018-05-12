@@ -1,19 +1,19 @@
 #include "heap.h"
 
 
-heap* init_heap(int kep,int size){
+heap* init_heap(int key,int size){
 	heap* new_heap = (heap*)malloc(sizeof(heap)*1);
-	heap->key = key;
+	new_heap->key = key;
 	new_heap->array=(process**)malloc(sizeof(process*)*size);
 	return new_heap;
 }
 
-void Is_leaf(heap* root,int idx){
+int Is_leaf(heap* root,int idx){
 	if(idx*2+1>=root->last)return 1;
 	return 0;
 }
 
-void min_idx(int left,int right,int cur,int idx){
+int min_idx(int left,int right,int cur,int idx){
 	int min=(left<right)?left:right;
 	min=(min<cur)? min:cur;
 	if(min==right)return idx*2+2;
@@ -31,7 +31,7 @@ int getKey(process* target,int key){
 	else if(key==LEFTCPU)
 		return target->CpuIO.LeftCpu;
 	else if(key==SLEFTCPU)
-		return target->CpuIO.TurnArray[target->CpuIo.Index];
+		return target->CpuIO.TurnArray[target->CpuIO.Index];
 }
 
 void downop(heap* root,int idx,int key){
@@ -79,6 +79,16 @@ process* heap_first(heap* root){
 
 void heap_insert(heap *root,process* newp){
 	root->array[root->last++]=newp;
-	upop(root,last-1,root->key);
+	upop(root,root->last-1,root->key);
 }
 
+void heap_free(heap* target){
+	if(target==NULL)return;
+	while(heap_first(target)!=NULL){
+		process* tmp = heap_first(target);
+		heap_pop(target);
+		process_free(tmp);
+	}
+	if(target->array!=NULL)free(target->array);
+	free(target);
+}
