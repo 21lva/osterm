@@ -49,8 +49,8 @@ Result* SJFA(process* parray[],int nump,int IsPreemptive){
 				ChangeRunning(running,ready);
 			}
 		}
-		else if(AllFinished(running,standby,ready)){
-			freeall(running,standby,ready);
+		if(AllFinished(running,standby,ready)){
+			//freeall(running,standby,ready);
 			break;
 		}
 		checkingList(result,running,time);		

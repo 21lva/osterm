@@ -2,8 +2,15 @@
 #include <time.h>
 //srand(time(NULL));
 
-void make_turn(process* pp,int Is_random,int cputime,int iotime){
+void randomize(){
 	srand(time(NULL));
+	int i=0;
+	for(i=0;i<(rand()%RAND_MAX);i++)(rand()%RAND_MAX);
+}
+
+void make_turn(process* pp,int Is_random,int cputime,int iotime){
+	randomize();
+	//printf("%d %d",cputime,iotime);	
 	int tmpcpu=cputime,tmpio=iotime;//variables used to check how much time we used for each operation
 	pp->CpuIO.TurnArray=(int*)malloc(sizeof(int)*(cputime+iotime));
 	int *target=pp->CpuIO.TurnArray;
@@ -13,7 +20,8 @@ void make_turn(process* pp,int Is_random,int cputime,int iotime){
 		//although it is just 1 time unit
 		target[0]=rrandom(tmpcpu);
 		tmpcpu-=target[0];
-		int next=1,index=0;
+		int next=1,index=1;
+	//printf("fasdfafasfaf\n");
 		while(tmpcpu>0 && tmpio>0){
 			if(next==0){
 				target[index]=rrandom(tmpcpu);
@@ -25,6 +33,7 @@ void make_turn(process* pp,int Is_random,int cputime,int iotime){
 				tmpio-=target[index++];
 				next=0;
 			}
+			//printf("%d %d\n",tmpcpu,tmpio);
 		}
 		if(tmpcpu>0)target[index++]=tmpcpu;
 		if(tmpio>0)target[index++]=tmpio;
@@ -59,7 +68,8 @@ void make_turn(process* pp,int Is_random,int cputime,int iotime){
 }
 
 process* make_process(int Is_random){
-	srand(time(NULL));
+	//printf("\nmaking process\n");
+	randomize();
 	static int pidDist=0;//process id will be distributed as auto increment
 	process* newp = (process*)malloc(sizeof(process)*1);
 	if(Is_random){
@@ -75,6 +85,7 @@ process* make_process(int Is_random){
 	newp->CpuIO.Index=0;
 	newp->CpuIO.LeftCpu=newp->cpuBT;
 	newp->CpuIO.LeftIO=newp->IOBT;
+	printf("id : %d cpubt : %d iobt : %d arri : %d  prio :%d\n",newp->processID,newp->cpuBT,newp->IOBT,newp->arrivalT,newp->priority);
 	make_turn(newp,Is_random,newp->cpuBT,newp->IOBT);
 	}
 	else{

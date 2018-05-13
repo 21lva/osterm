@@ -1,18 +1,23 @@
 #include "evaluation.h"
 
 void GanttChart(Result* result){
+	if(result==NULL)printf("fuck1\n");
+	if(result->list==NULL)printf("fuck2\n");
 	queue* List = result->list;
-	qelement* cur,*pre=NULL;
+	qelement* cur=NULL,*pre=NULL;
 	int i=0;
+	printf("Gantt Chart : ");
 	while(queue_first(List)!=NULL){
 		cur = queue_first(List);
-		if(pre!=NULL&&cur->processID==pre->processID)printf("~");
-		else printf("%d~~ID : %d~",i,cur->processID);
+		//printf("id : %d startT : %d fiT : %d\n",cur->processID,cur->startT,cur->finishedT);
+		if(pre==NULL)printf("0--[IDLE]-");
+		else if(cur->processID==pre->processID)printf("-");
+		else printf("%d--[pid : %d]-",cur->startT,cur->processID);
 		i++;
 		pre=cur;
 		queue_pop(List);
 	}
-	printf("\n");
+	printf("%d\n",cur->finishedT);
 }
 
 void WTTT(Result* result){
@@ -21,7 +26,7 @@ void WTTT(Result* result){
 	while(stack_last(Stack)!=NULL){
 		process* cur = stack_last(Stack);
 		int finT = cur->finishedT,arrT = cur->arrivalT,CB=cur->cpuBT,IB=cur->IOBT;
-		printf("process ID :%2d --- waiting time :%3d , turnaround time :%3d",cur->processID,finT-arrT-CB-IB,finT-arrT);
+		printf("process ID :%2d --- waiting time :%3d , turnaround time :%3d\n",cur->processID,finT-arrT-CB-IB,finT-arrT);
 		stack_pop(Stack);
 		count++;
 		twt+=finT-arrT-CB-IB;

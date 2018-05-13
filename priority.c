@@ -17,11 +17,9 @@ Result* PRIORITYA(process* parray[],int nump,int IsPreemptive){
 	ready=init_heap(2,nump);
 	standby=init_heap(1,nump);
 	for(time=0;time<nump;time++)heap_insert(standby,parray[time]);
-
-
+	
 	for(time=0;/*infinitely*/;time++){
 		FromstandbyToready(standby,ready,time);
-
 		if(running->Process==NULL){
 			idle++;
 			if(IsAvailProcess(ready,0,time))
@@ -50,8 +48,8 @@ Result* PRIORITYA(process* parray[],int nump,int IsPreemptive){
 				ChangeRunning(running,ready);
 			}
 		}
-		else if(AllFinished(running,ready,standby)){
-			freeall(running,ready,standby);
+		if(AllFinished(running,ready,standby)){
+			//freeall(running,ready,standby);
 			break;
 		}
 		checkingList(result,running,time);

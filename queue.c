@@ -4,11 +4,13 @@
 queue* init_queue(){
 	queue* re = (queue*)malloc(sizeof(queue)*1);
 	qelement* root = (qelement*)malloc(sizeof(qelement)*1);
+	
 	root->processID=-1;
 	root->startT=-1;
 	root->finishedT=-1;
 	root->next=NULL;
 	root->before=NULL;
+	
 	re->last=root;
 	re->first=root;
 }
@@ -26,12 +28,13 @@ void queue_insert(queue* target,int processID,int startT,int finishedT){
 void qelement_free(qelement* target){
 	target->next=NULL;
 	target->before=NULL;
-	free(target);
+	//free(target);
 }
 void queue_pop(queue* target){
 	qelement *tmp = target->first->next;
 	target->first->next = tmp->next;
-	tmp->next->before = target->first;
+	if(tmp->next!=NULL)
+		tmp->next->before = target->first;
 	qelement_free(tmp);
 }
 void queue_free(queue* target){

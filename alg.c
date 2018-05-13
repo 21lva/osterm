@@ -3,8 +3,8 @@
 
 Result* init_Result(){
 	Result* re = (Result*)malloc(sizeof(Result)*1);
-	re->finished=init_stack();
-	re->list=init_queue();
+	re->finished = init_stack();
+	re->list = init_queue();
 	re->totaltime=0;
 	re->idle=0;
 	return re;
@@ -18,12 +18,16 @@ Running* init_Running(int timeq){
 }
 
 int RunningFinished(Running* running){
-	if(running->Process==NULL)return 0;
-	if(running->Process->CpuIO.LeftCpu==0)return 1;
+	if(running->Process==NULL)return 1;
+	if(running->Process->CpuIO.LeftCpu<=0)return 1;
+	return 0;
 }
 
 void ChangeRunning(Running* running,heap* ready){
+	//printf("id:%d",ready->last);
+	//printf("ccccccccccc\n");
 	running->Process=heap_first(ready);
+	//printf("fffffffffff\n");
 	heap_pop(ready);
 }
 
@@ -40,9 +44,11 @@ int RunningInterrupted(Running* running,int bywhom){
 }
 
 void SpendTime(Running* running){
-	if(running->Process==NULL)return;
+	if(running->Process!=NULL){
 	running->Process->CpuIO.LeftCpu--;
 	running->Process->CpuIO.TurnArray[running->Process->CpuIO.Index]--;
+	running->timeQuantum--;
+	}
 }
 
 int AllFinished(Running* running,heap* heap1,heap* heap2){
@@ -52,28 +58,32 @@ int AllFinished(Running* running,heap* heap1,heap* heap2){
 }
 
 void FinishProcess(Running* running,int time,stack* finished){
-	if(running->Process==NULL)return;
+	//printf("finishied!!\n");
 	running->Process->finishedT=time;
-	if(running->Process->CpuIO.LeftIO!=0)running->Process->finishedT+=running->Process->CpuIO.LeftIO;
+	if(running->Process->CpuIO.LeftIO!=0)
+		running->Process->finishedT+=running->Process->CpuIO.LeftIO;
 	stack_insert(finished,running->Process);
 	running->Process=NULL;
+	
 }
 
 void FromstandbyToready(heap* standby,heap* ready,int time){
-	process* st,rd;
+	process* st=NULL;
 	while(1){
 		st = heap_first(standby);
+		if(st == NULL)break;
 		if(st->gettingT>time)break;
 		heap_insert(ready,st);
 		heap_pop(standby);
 	}
+	//printf("done\n");
 }
 void Running_free(Running* target){
 	process_free(target->Process);
 	free(target);
 }
 void freeall(Running* running, heap* heap1,heap* heap2){
-	Running_free(running);
+//	Running_free(running);
 	heap_free(heap1);
 	heap_free(heap2);
 }

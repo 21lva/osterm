@@ -16,21 +16,24 @@ Result* RRA(process* parray[],int nump,int TimeQuantum){
 	ready=init_heap(1,nump);
 	//standby=init_heap(1,nump);
 	for(time=0;time<nump;time++)heap_insert(ready,parray[time]);
-
+//	printf("safasdfsf");
 
 	for(time=0;/*infinitely*/;time++){
 		//FromstandbyToready(standby,ready,time);
-
+//		printf("%d\n",time);
 		if(running->Process==NULL){
 			idle++;
-			if(IsAvailProcess(ready,1,time))
+			if(IsAvailProcess(ready,1,time)){
 				ChangeRunning(running,ready);
+				running->timeQuantum=TimeQuantum;
+			}
 		}
 
 		else if(RunningFinished(running)){
 			FinishProcess(running,time,finished);
 			if(IsAvailProcess(ready,1,time)){
 				ChangeRunning(running,ready);
+				running->timeQuantum=TimeQuantum;
 			}
 		}
 
@@ -39,6 +42,7 @@ Result* RRA(process* parray[],int nump,int TimeQuantum){
 			heap_insert(ready,running->Process);
 			if(IsAvailProcess(ready,1,time)){
 				ChangeRunning(running,ready);
+				running->timeQuantum=TimeQuantum;
 			}
 		}
 		else if(running->timeQuantum ==0){
@@ -46,6 +50,7 @@ Result* RRA(process* parray[],int nump,int TimeQuantum){
 			heap_insert(ready,running->Process);
 			if(IsAvailProcess(ready,1,time)){
 				ChangeRunning(running,ready);
+				running->timeQuantum=TimeQuantum;
 			}
 		}
 		/*
@@ -56,8 +61,8 @@ Result* RRA(process* parray[],int nump,int TimeQuantum){
 				ChangeRunning(running,ready);
 			}
 		}*/
-		else if(AllFinished(running,ready,ready)){
-			freeall(running,ready,ready);
+	 	if(AllFinished(running,ready,ready)){
+			//freeall(running,ready,ready);
 			break;
 		}
 		checkingList(result,running,time);		

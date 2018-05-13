@@ -13,17 +13,19 @@ void stack_insert(stack* target,process* X){
 	target->last=newel;
 }
 void element_free(element* target){
-	process_free(target->el);
+	//process_free(target->el);
 	target->next=NULL;
-	free(target);
+	//free(target);
 }
 
 void stack_pop(stack* target){
-	element* tmp=target->last->next;
+	if(target->last==NULL)return;
+	element* tmp = target->last->next;
 	element_free(target->last);
 	target->last=tmp;
 }
 
 process* stack_last(stack* target){
+	if(target->last==NULL)return NULL;
 	return target->last->el;
 }

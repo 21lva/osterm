@@ -5,10 +5,13 @@ heap* init_heap(int key,int size){
 	heap* new_heap = (heap*)malloc(sizeof(heap)*1);
 	new_heap->key = key;
 	new_heap->array=(process**)malloc(sizeof(process*)*size);
+	new_heap->last=0;
 	return new_heap;
+
 }
 
 int Is_leaf(heap* root,int idx){
+	if(root->last==1)return 1;
 	if(idx*2+1>=root->last)return 1;
 	return 0;
 }
@@ -36,6 +39,7 @@ int getKey(process* target,int key){
 
 void downop(heap* root,int idx,int key){
 	int left,right,cur;
+	//printf("index : %d\n",idx);
 	if(Is_leaf(root,idx))return;
 	else{
 		//getting key value of each process;
@@ -69,11 +73,16 @@ void upop(heap* root,int idx,int key){
 
 void heap_pop(heap* root){
 	if(root->last==0)return;
+	else{
 	root->array[0]=root->array[root->last-1];
 	downop(root,0,root->key);
+	root->last--;
+	}
 }
 
 process* heap_first(heap* root){
+	if(root==NULL)return NULL;
+	if(root->last==0)return NULL;
 	return root->array[0];
 }
 
