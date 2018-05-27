@@ -1,0 +1,4 @@
+fcfs + rr : should fix to if there is same time but some time difference
+
+check whether waiting time is set as true.
+

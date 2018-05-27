@@ -9,10 +9,11 @@ void GanttChart(Result* result){
 	printf("Gantt Chart : ");
 	while(queue_first(List)!=NULL){
 		cur = queue_first(List);
-		//printf("id : %d startT : %d fiT : %d\n",cur->processID,cur->startT,cur->finishedT);
-		if(pre==NULL)printf("0--[IDLE]-");
+		if(pre==NULL&&cur->processID==-1)printf("0--[IDLE]-");
+		else if(pre==NULL)printf("0--[pid : %d]-",cur->processID);
 		else if(cur->processID==pre->processID)printf("-");
-		else printf("%d--[pid : %d]-",cur->startT,cur->processID);
+		else if(cur->processID!=-1)printf("%d--[pid : %d]-",cur->startT,cur->processID);
+		else printf("%d--[IDLE]-",cur->startT);
 		i++;
 		pre=cur;
 		queue_pop(List);
@@ -26,6 +27,7 @@ void WTTT(Result* result){
 	while(stack_last(Stack)!=NULL){
 		process* cur = stack_last(Stack);
 		int finT = cur->finishedT,arrT = cur->arrivalT,CB=cur->cpuBT,IB=cur->IOBT;
+		printf("%d %d %d %d",finT,arrT,CB,IB);
 		printf("process ID :%2d --- waiting time :%3d , turnaround time :%3d\n",cur->processID,finT-arrT-CB-IB,finT-arrT);
 		stack_pop(Stack);
 		count++;

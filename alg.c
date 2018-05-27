@@ -39,8 +39,24 @@ int IsAvailProcess(heap* ready,int IsFCFS,int time){
 
 int RunningInterrupted(Running* running,int bywhom){
 	process* rp = running->Process;
+	//by whom = 0 : by io interruption
 	if(bywhom==0&&rp->CpuIO.TurnArray[rp->CpuIO.Index]==0)return 1;
+
 	return 0;
+}
+
+int RunningPreemptive(Running* running,heap* ready,int type){
+	if(type == 2){
+	//using priority
+		if(heap_first(ready)==NULL)return 0;
+		if(running->Process->priority > heap_first(ready)->priority)return 1;
+		return 0;
+	}
+	else{
+		if(heap_first(ready)==NULL)return 0;
+		if(running->Process->CpuIO.LeftCpu > heap_first(ready)->CpuIO.LeftCpu)return 1;
+		return 0;
+	}
 }
 
 void SpendTime(Running* running){

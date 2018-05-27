@@ -2,6 +2,8 @@
 #define ALGORITHMS_H
 
 #include "alg.h"
+#include <time.h>
+#include <stdlib.h>
 
 Result* FCFSA(process* parray[],int nump);
 Result* PRIORITYA(process* parray[],int nump,int IsPreemptive);

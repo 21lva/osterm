@@ -76,6 +76,7 @@ void heap_pop(heap* root){
 	else{
 	root->array[0]=root->array[root->last-1];
 	downop(root,0,root->key);
+	//printf("is leaf : %d\n",Is_leaf(root,0));
 	root->last--;
 	}
 }

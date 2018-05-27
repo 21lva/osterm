@@ -46,4 +46,6 @@ void freeall(Running* running, heap* heap1,heap* heap2);
 
 void checkingList(Result* resutl,Running* running,int time);
 
+int RunningPreemptive(Running* running,heap* ready,int type);
+
 #endif

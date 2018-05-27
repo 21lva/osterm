@@ -9,10 +9,9 @@ void randomize(){
 }
 
 void make_turn(process* pp,int Is_random,int cputime,int iotime){
-	randomize();
 	//printf("%d %d",cputime,iotime);	
 	int tmpcpu=cputime,tmpio=iotime;//variables used to check how much time we used for each operation
-	pp->CpuIO.TurnArray=(int*)malloc(sizeof(int)*(cputime+iotime));
+	pp->CpuIO.TurnArray=(int*)malloc(sizeof(int)*(1+cputime+iotime));
 	int *target=pp->CpuIO.TurnArray;
 	if(Is_random){
 		//if the turn should be decided randomly
@@ -69,7 +68,6 @@ void make_turn(process* pp,int Is_random,int cputime,int iotime){
 
 process* make_process(int Is_random){
 	//printf("\nmaking process\n");
-	randomize();
 	static int pidDist=0;//process id will be distributed as auto increment
 	process* newp = (process*)malloc(sizeof(process)*1);
 	if(Is_random){

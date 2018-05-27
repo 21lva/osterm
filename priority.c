@@ -3,6 +3,7 @@
 
 //The algorithm return total running time 
 Result* PRIORITYA(process* parray[],int nump,int IsPreemptive){
+	srand(time(NULL));
 	heap* standby;//"standby" heap is sorted by using getting time
 	heap* ready;//"ready" heap is sorted by using left cpu time
 	Running* running=init_Running(0); 
@@ -39,9 +40,12 @@ Result* PRIORITYA(process* parray[],int nump,int IsPreemptive){
 			if(IsAvailProcess(ready,0,time)){
 				ChangeRunning(running,ready);
 			}
+			else{
+				running->Process=NULL;
+			}
 		}
 
-		else if(IsPreemptive&&RunningInterrupted(running,BYPROCESS)){
+		else if(IsPreemptive&&RunningPreemptive(running,ready,PRIORITY)){
 			interrupt_process(running->Process,BYPROCESS,time);
 			heap_insert(standby,running->Process);
 			if(IsAvailProcess(ready,0,time)){

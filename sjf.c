@@ -2,6 +2,7 @@
 
 //The algorithm return total running time 
 Result* SJFA(process* parray[],int nump,int IsPreemptive){
+	srand(time(NULL));
 	heap* standby;//"standby" heap is sorted by using getting time
 	heap* ready;//"ready" heap is sorted by using left cpu time
 	Running* running=init_Running(0); 
@@ -19,40 +20,65 @@ Result* SJFA(process* parray[],int nump,int IsPreemptive){
 
 
 	for(time=0;/*infinitely*/;time++){
+			printf("===%d time===\n",time);
+			printf("1\n");
 		FromstandbyToready(standby,ready,time);
+			printf("2\n");
 
 		if(running->Process==NULL){
+			printf("3\n");
 			idle++;
-			if(IsAvailProcess(ready,0,time))
+			if(IsAvailProcess(ready,0,time)){
+			printf("4\n");
 				ChangeRunning(running,ready);
+			}
 		}
 
 		else if(RunningFinished(running)){
+			printf("5\n");
 			FinishProcess(running,time,finished);
+			printf("6\n");
 			if(IsAvailProcess(ready,0,time)){
+			printf("7\n");
 				ChangeRunning(running,ready);
 			}
 		}
 
 		else if(RunningInterrupted(running,BYIO)){
+			printf("8\n");
 			interrupt_process(running->Process,BYIO,time);
+			printf("9\n");
 			heap_insert(standby,running->Process);
+			printf("10\n");
 			if(IsAvailProcess(ready,0,time)){
+			printf("11\n");
 				ChangeRunning(running,ready);
+			printf("12\n");
+			}
+			else{
+			printf("13\n");
+				running->Process=NULL;
 			}
 		}
 
-		else if(IsPreemptive&&RunningInterrupted(running,BYPROCESS)){
+		else if(IsPreemptive&&RunningPreemptive(running,ready,0)){
+			printf("14\n");
 			interrupt_process(running->Process,BYPROCESS,time);
+			printf("15\n");
 			heap_insert(standby,running->Process);
+			printf("16\n");
 			if(IsAvailProcess(ready,0,time)){
+			printf("17\n");
 				ChangeRunning(running,ready);
+			printf("18\n");
 			}
 		}
 		if(AllFinished(running,standby,ready)){
+			printf("19\n");
 			//freeall(running,standby,ready);
 			break;
 		}
+			printf("20\n");
 		checkingList(result,running,time);		
 		SpendTime(running);
 	}

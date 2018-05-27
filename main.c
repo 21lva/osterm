@@ -27,6 +27,7 @@ void config(int* IsRandom,int* Alg,int* numP,int* tq){
 
 int main(){
 	int IsRandom,Alg,numP=3,tq=0,i;
+	srand(time(NULL));
 	config(&IsRandom,&Alg,&numP,&tq);
 	printf("Random : %d ,Algorithm : %d , number of process : %d, time quantum : %d\n",IsRandom,Alg,numP,tq);
 	process** parray = (process**)malloc(sizeof(process*)*numP);
