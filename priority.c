@@ -53,7 +53,6 @@ Result* PRIORITYA(process* parray[],int nump,int IsPreemptive){
 			}
 		}
 		if(AllFinished(running,ready,standby)){
-			//freeall(running,ready,standby);
 			break;
 		}
 		checkingList(result,running,time);

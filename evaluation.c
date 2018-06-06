@@ -27,7 +27,6 @@ void WTTT(Result* result){
 	while(stack_last(Stack)!=NULL){
 		process* cur = stack_last(Stack);
 		int finT = cur->finishedT,arrT = cur->arrivalT,CB=cur->cpuBT,IB=cur->IOBT;
-		printf("%d %d %d %d",finT,arrT,CB,IB);
 		printf("process ID :%2d --- waiting time :%3d , turnaround time :%3d\n",cur->processID,finT-arrT-CB-IB,finT-arrT);
 		stack_pop(Stack);
 		count++;

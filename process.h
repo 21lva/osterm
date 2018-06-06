@@ -13,6 +13,7 @@ typedef struct _turn{
 	int Index;//In array, what operation is next operation
 	int LeftCpu;//total amount of left cpu type operation
 	int LeftIO;//total amount of left IO type operation
+	int X;
 }turn;
 
 typedef struct _process{
@@ -32,6 +33,7 @@ void remove_process(process* target);
 void process_free(process* target);
 void _FinishProcess(process* target,int time);
 int Is_finished_process(process* target);
+//void copyProcess(process* parray1[],process* parray2[],int numP);
 
 //#include "mainheader.h"
 

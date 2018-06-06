@@ -39,7 +39,6 @@ int getKey(process* target,int key){
 
 void downop(heap* root,int idx,int key){
 	int left,right,cur;
-	//printf("index : %d\n",idx);
 	if(Is_leaf(root,idx))return;
 	else{
 		//getting key value of each process;
@@ -76,7 +75,6 @@ void heap_pop(heap* root){
 	else{
 	root->array[0]=root->array[root->last-1];
 	downop(root,0,root->key);
-	//printf("is leaf : %d\n",Is_leaf(root,0));
 	root->last--;
 	}
 }

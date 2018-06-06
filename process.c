@@ -9,7 +9,6 @@ void randomize(){
 }
 
 void make_turn(process* pp,int Is_random,int cputime,int iotime){
-	//printf("%d %d",cputime,iotime);	
 	int tmpcpu=cputime,tmpio=iotime;//variables used to check how much time we used for each operation
 	pp->CpuIO.TurnArray=(int*)malloc(sizeof(int)*(1+cputime+iotime));
 	int *target=pp->CpuIO.TurnArray;
@@ -19,8 +18,7 @@ void make_turn(process* pp,int Is_random,int cputime,int iotime){
 		//although it is just 1 time unit
 		target[0]=rrandom(tmpcpu);
 		tmpcpu-=target[0];
-		int next=1,index=1;
-	//printf("fasdfafasfaf\n");
+		int next=1,index=1,xx=0;
 		while(tmpcpu>0 && tmpio>0){
 			if(next==0){
 				target[index]=rrandom(tmpcpu);
@@ -32,13 +30,20 @@ void make_turn(process* pp,int Is_random,int cputime,int iotime){
 				tmpio-=target[index++];
 				next=0;
 			}
-			//printf("%d %d\n",tmpcpu,tmpio);
+			xx++;
 		}
-		if(tmpcpu>0)target[index++]=tmpcpu;
-		if(tmpio>0)target[index++]=tmpio;
+		if(tmpcpu>0){
+			target[index++]=tmpcpu;
+			xx++;
+		}
+		if(tmpio>0){
+			target[index++]=tmpio;
+			xx++;
+		}
+		pp->CpuIO.X=xx;
 	}
 	else{
-		int index=0,next=0;
+		int index=0,next=0,xx=0;
 		while(tmpcpu>0&&tmpio>0){
 			if(next==0){
 				printf("CPU type %dth operation, insert how much?? from 1 to %d : ",index+1,tmpcpu);
@@ -60,14 +65,21 @@ void make_turn(process* pp,int Is_random,int cputime,int iotime){
 				tmpio-=target[index++];
 				next=0;
 			}
+			xx++;
 		}
-		if(tmpcpu>0)target[index++]=tmpcpu;
-		if(tmpio>0)target[index++]=tmpio;
+		if(tmpcpu>0){
+			target[index++]=tmpcpu;
+			xx++;
+		}
+		if(tmpio>0){
+			target[index++]=tmpio;
+			xx++;
+		}
+		pp->CpuIO.X=xx;
 	}
 }
 
 process* make_process(int Is_random){
-	//printf("\nmaking process\n");
 	static int pidDist=0;//process id will be distributed as auto increment
 	process* newp = (process*)malloc(sizeof(process)*1);
 	if(Is_random){
@@ -105,7 +117,7 @@ process* make_process(int Is_random){
 		make_turn(newp,Is_random,newp->cpuBT,newp->IOBT);
 	}
 	return newp;
-}
+
 
 void interrupt_process(process* target,int bywhom,int time){
 	if(bywhom==BYPROCESS||bywhom==BYTQ){
@@ -144,3 +156,25 @@ int Is_finished_process(process* target){
 	}
 	return 0;
 }
+/*
+void copyProcess(process* parray1[],process* parray2[],int numP){
+	int i =0,j=0 ;
+	for(i=0 ; i<numP ; i++){
+		parray2[i]->processID=parray1[i]->processID;
+		parray2[i]->cpuBT=parray1[i]->cpuBT;
+		parray2[i]->IOBT = parray1[i]->IOBT;
+		parray2[i]->arrivalT = parray1[i]->arrivalT;
+		parray2[i]->gettingT = parray1[i]->gettingT;
+		parray2[i]->priority = parray1[i]->priority;
+		parray2[i]->finishedT = parray1[i]->finishedT;
+
+		parray2[i]->CpuIO.NextType = parray1[i]->CpuIO.NextType;
+		parray2[i]->CpuIO.Index = parray1[i]->CpuIO.Index;
+		parray2[i]->CpuIO.LeftIO = parray1[i]->CpuIO.LeftCpu;
+		parray2[i]->CpuIO.LeftCpu = parray1[i]->CpuIO.LeftCpu;
+
+		for(j=0 ; j<parray1[i]->CpuIO.X ; j++){
+			parray2[i]->CpuIO.TurnArray[j] = parray1[i]->CpuIO.TurnArray[j];
+		}
+	}
+}*/

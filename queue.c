@@ -28,7 +28,6 @@ void queue_insert(queue* target,int processID,int startT,int finishedT){
 void qelement_free(qelement* target){
 	target->next=NULL;
 	target->before=NULL;
-	//free(target);
 }
 void queue_pop(queue* target){
 	qelement *tmp = target->first->next;

@@ -24,10 +24,7 @@ int RunningFinished(Running* running){
 }
 
 void ChangeRunning(Running* running,heap* ready){
-	//printf("id:%d",ready->last);
-	//printf("ccccccccccc\n");
 	running->Process=heap_first(ready);
-	//printf("fffffffffff\n");
 	heap_pop(ready);
 }
 
@@ -39,7 +36,6 @@ int IsAvailProcess(heap* ready,int IsFCFS,int time){
 
 int RunningInterrupted(Running* running,int bywhom){
 	process* rp = running->Process;
-	//by whom = 0 : by io interruption
 	if(bywhom==0&&rp->CpuIO.TurnArray[rp->CpuIO.Index]==0)return 1;
 
 	return 0;
@@ -74,7 +70,6 @@ int AllFinished(Running* running,heap* heap1,heap* heap2){
 }
 
 void FinishProcess(Running* running,int time,stack* finished){
-	//printf("finishied!!\n");
 	running->Process->finishedT=time;
 	if(running->Process->CpuIO.LeftIO!=0)
 		running->Process->finishedT+=running->Process->CpuIO.LeftIO;
@@ -92,14 +87,12 @@ void FromstandbyToready(heap* standby,heap* ready,int time){
 		heap_insert(ready,st);
 		heap_pop(standby);
 	}
-	//printf("done\n");
 }
 void Running_free(Running* target){
 	process_free(target->Process);
 	free(target);
 }
 void freeall(Running* running, heap* heap1,heap* heap2){
-//	Running_free(running);
 	heap_free(heap1);
 	heap_free(heap2);
 }

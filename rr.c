@@ -18,15 +18,12 @@ Result* RRA(process* parray[],int nump,int TimeQuantum){
 	//first, make heap with key value 1(getting time)
 	//second, insert all processes in parray into heap
 	ready=init_heap(1,nump);
-	//standby=init_heap(1,nump);
 	for(time=0;time<nump;time++)
 	{
 		if(parray[time]->arrivalT==0)standby[last++]=parray[time];
 		else
 			heap_insert(ready,parray[time]);
 	}
-//	printf("safasdfsf");
-
 	for(time=0;/*infinitely*/;time++){
 		while(IsAvailProcess(ready,1,time)){
 			ChangeRunning(fake,ready);
@@ -113,7 +110,6 @@ Result* RRA(process* parray[],int nump,int TimeQuantum){
 			}
 		}*/
 	 	if(AllFinished(running,ready,ready)){
-			//freeall(running,ready,ready);
 			break;
 		}
 		checkingList(result,running,time);		

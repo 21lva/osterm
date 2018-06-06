@@ -13,7 +13,6 @@ Result* FCFSA(process* parray[],int nump){
 	int idle=-1;
 	int time=0;
 
-	//printf("number of processes :  %d\n",nump);
 	//initialize heap
 	//first, make heap with key value 1(getting time)
 	//second, insert all processes in parray into heap
@@ -32,9 +31,7 @@ Result* FCFSA(process* parray[],int nump){
 			last++;
 			last%=nump+1;
 		}
-		//printf("hehe\n");
 		if(running->Process==NULL){
-		//printf("time1 : %d\n",time);
 			idle++;
 			if(last!=first){
 				running->Process=standby[first];
@@ -52,7 +49,6 @@ Result* FCFSA(process* parray[],int nump){
 
 		else if(RunningFinished(running)){
 			int i=0;
-	//	printf("time2 : %d %d\n",heap_first(ready)->processID,ready->last);
 			FinishProcess(running,time,finished);
 			if(last!=first){
 				running->Process=standby[first];
@@ -66,7 +62,6 @@ Result* FCFSA(process* parray[],int nump){
 		}
 
 		else if(RunningInterrupted(running,BYIO)){
-		//	printf("time3 : %d\n",time);
 			interrupt_process(running->Process,BYIO,time);
 			heap_insert(ready,running->Process);
 			if(last!=first){
@@ -84,8 +79,6 @@ Result* FCFSA(process* parray[],int nump){
 		}
 	
 		if(AllFinished(running,ready,ready)){
-		//printf("time4 : %d\n",time);
-//			freeall(running,ready,ready);
 		break;
 		}
 		
