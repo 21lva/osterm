@@ -40,11 +40,6 @@ Result* RRA(process* parray[],int nump,int TimeQuantum){
 				running->timeQuantum=TimeQuantum;
 			}
 
-			/*
-			if(IsAvailProcess(ready,1,time)){
-				ChangeRunning(running,ready);
-				running->timeQuantum=TimeQuantum;
-			}*/
 		}
 
 		else if(RunningFinished(running)){
@@ -55,12 +50,7 @@ Result* RRA(process* parray[],int nump,int TimeQuantum){
 				first%=nump+1;
 				running->timeQuantum=TimeQuantum;
 			}
-			/*
-			if(IsAvailProcess(ready,1,time)){
-				ChangeRunning(running,ready);
-				running->timeQuantum=TimeQuantum;
-			}*/
-		}
+				}
 
 		else if(RunningInterrupted(running,BYIO)){
 			interrupt_process(running->Process,BYIO,time);
@@ -71,11 +61,6 @@ Result* RRA(process* parray[],int nump,int TimeQuantum){
 				first%=nump+1;
 				running->timeQuantum=TimeQuantum;
 			}
-			/*
-			if(IsAvailProcess(ready,1,time)){
-				ChangeRunning(running,ready);
-				running->timeQuantum=TimeQuantum;
-			}*/
 			else{
 				running->Process=NULL;
 			}
@@ -83,7 +68,6 @@ Result* RRA(process* parray[],int nump,int TimeQuantum){
 		else if(running->timeQuantum ==0){
 			standby[last]=running->Process;
 			interrupt_process(running->Process,BYTQ,time);
-			//heap_insert(ready,running->Process);
 			last++;
 			last%=nump+1;
 			if(last!=first){
@@ -92,23 +76,10 @@ Result* RRA(process* parray[],int nump,int TimeQuantum){
 				first%=nump+1;
 				running->timeQuantum=TimeQuantum;
 			}
-/*
-			if(IsAvailProcess(ready,1,time)){
-				ChangeRunning(running,ready);
-				running->timeQuantum=TimeQuantum;
-			}*/
 			else{
 				running->Process=NULL;
 			}
 		}
-		/*
-		else if(IsPreemptive&&RunningInterrupted(running,BYPROCESS)){
-			interrupt_process(running->Process,BYPROCESS,time);
-			heap_insert(ready,running->Process);
-			if(IsAvailProcess(ready,1,time)){
-				ChangeRunning(running,ready);
-			}
-		}*/
 	 	if(AllFinished(running,ready,ready)){
 			break;
 		}

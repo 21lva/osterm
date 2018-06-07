@@ -38,13 +38,6 @@ Result* FCFSA(process* parray[],int nump){
 				first++;
 				first%=nump+1;
 			}
-			/*
-			if(IsAvailProcess(ready,1,time))
-			{
-		//		printf("sdafsdffqfwefqwfqwf\n");
-				ChangeRunning(running,ready);
-				printf("id %d\n",running->Process->processID);
-			}*/
 		}
 
 		else if(RunningFinished(running)){
@@ -55,10 +48,6 @@ Result* FCFSA(process* parray[],int nump){
 				first++;
 				first%=nump+1;
 			}
-			/*
-			if(IsAvailProcess(ready,1,time)){
-				ChangeRunning(running,ready);
-			}*/
 		}
 
 		else if(RunningInterrupted(running,BYIO)){
@@ -69,10 +58,6 @@ Result* FCFSA(process* parray[],int nump){
 				first++;
 				first%=nump+1;
 			}
-			/*
-			if(IsAvailProcess(ready,1,time)){
-				ChangeRunning(running,ready);
-			}*/
 			else{
 				running->Process=NULL;
 			}

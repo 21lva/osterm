@@ -23,66 +23,55 @@ void config(int* IsRandom,int* Alg,int* numP,int* tq){
 }
 
 int main(){
-	int IsRandom,Alg,numP=3,tq=0,i;
-	srand(time(NULL));
+	int IsRandom,Alg,numP=3,tq=0,i,ii;
 	config(&IsRandom,&Alg,&numP,&tq);
+	process*** parray=(process***)malloc(sizeof(process**)*100);
+	for(ii=0;ii<NUMEPISODE;ii++){
+	srand(time(NULL)*(ii)+time(NULL)*ii*ii);
 	printf("**********************************************************************\n");
 	printf("Random : %d ,Algorithm : %s , number of process : %d, time quantum : %d\n",IsRandom,algarr[Alg],numP,tq);
 	printf("**********************************************************************\n");
-	process** parray = (process**)malloc(sizeof(process*)*numP);
+	parray[ii] = (process**)malloc(sizeof(process*)*numP);
 	printf("IF there are process that have same arrival time\nYou must type first coming process first\n");
 	for(i=0;i<numP;i++){
 		printf("*******insert value of %dth process******\n",i+1);
-		parray[i]=make_process(IsRandom);
+		parray[ii][i]=make_process(IsRandom);
 	}
 	Result* result=NULL;
 	printf("##############################################################\n");
 	for(i=0;i<numP;i++){
-		printf("%d process\nCpuBT : %d IOT : %d ArivalT : %d Priority : %d\n",i+1,parray[i]->cpuBT,parray[i]->IOBT,parray[i]->arrivalT,parray[i]->priority);
-		int lc=parray[i]->CpuIO.LeftCpu,li=parray[i]->CpuIO.LeftIO,j=0;
+		printf("%d process\nCpuBT : %d IOT : %d ArivalT : %d Priority : %d\n",i+1,parray[ii][i]->cpuBT,parray[ii][i]->IOBT,parray[ii][i]->arrivalT,parray[ii][i]->priority);
+		int lc=parray[ii][i]->CpuIO.LeftCpu,li=parray[ii][i]->CpuIO.LeftIO,j=0;
 		while(lc>0||li>0){
 			if(j%2==0)printf("CPU:");
 			else printf("IO:");
-			printf("[%d] ",parray[i]->CpuIO.TurnArray[j]);
-			if(j%2==0)lc-=parray[i]->CpuIO.TurnArray[j];
-			else li-=parray[i]->CpuIO.TurnArray[j];
+			printf("[%d] ",parray[ii][i]->CpuIO.TurnArray[j]);
+			if(j%2==0)lc-=parray[ii][i]->CpuIO.TurnArray[j];
+			else li-=parray[ii][i]->CpuIO.TurnArray[j];
 			j++;
 		}
 		printf("\n");
 	}
-	/*
-	process** parray1 = (process**)malloc(sizeof(process*)*numP);
-	process** parray2 = (process**)malloc(sizeof(process*)*numP);
-	process** parray3 = (process**)malloc(sizeof(process*)*numP);
-	process** parray4 = (process**)malloc(sizeof(process*)*numP);
-	process** parray5 = (process**)malloc(sizeof(process*)*numP);
-	copyProcess(parray,parray1,numP);
-	copyProcess(parray,parray2,numP);
-	copyProcess(parray,parray3,numP);
-	copyProcess(parray,parray4,numP);
-	copyProcess(parray,parray5,numP);*/
 	printf("##############################################################\n");
-	while(1){
-//	printf("Choose Algorithm\n1. FCFS\n2. non-preemptive SJF\n3. preemptive SJF\n4. non-preemptive priority\n5. preemptive priority\n6. Round Robin : \n");
-//	scanf("%d",&Alg);
+	
 	if(Alg==FCFS)
-		result = FCFSA(parray,numP);
+		result = FCFSA(parray[ii],numP);
 	else if(Alg==NONP_SJF)
-		result = SJFA(parray,numP,0);
+		result = SJFA(parray[ii],numP,0);
 	else if(Alg==P_SJF)
-		result = SJFA(parray,numP,1);
+		result = SJFA(parray[ii],numP,1);
 	else if(Alg==NONP_PRIORITY)
-		result = PRIORITYA(parray,numP,0);
+		result = PRIORITYA(parray[ii],numP,0);
 	else if(Alg==P_PRIORITY)
-		result = PRIORITYA(parray,numP,1);
+		result = PRIORITYA(parray[ii],numP,1);
 	else if(Alg==RR)
-		result = RRA(parray,numP,tq);
+		result = RRA(parray[ii],numP,tq);
 	printf("##############################################################\n");
-	break;
-	}
 	GanttChart(result);
-	WTTT(result);
+	WTTT(result,Alg);
 	CpuUtilization(result);
+	free(parray[ii]);
+	}
 	return 0;
 }
 

@@ -30,17 +30,13 @@ void make_turn(process* pp,int Is_random,int cputime,int iotime){
 				tmpio-=target[index++];
 				next=0;
 			}
-			xx++;
 		}
 		if(tmpcpu>0){
 			target[index++]=tmpcpu;
-			xx++;
 		}
 		if(tmpio>0){
 			target[index++]=tmpio;
-			xx++;
 		}
-		pp->CpuIO.X=xx;
 	}
 	else{
 		int index=0,next=0,xx=0;
@@ -65,17 +61,13 @@ void make_turn(process* pp,int Is_random,int cputime,int iotime){
 				tmpio-=target[index++];
 				next=0;
 			}
-			xx++;
 		}
 		if(tmpcpu>0){
 			target[index++]=tmpcpu;
-			xx++;
 		}
 		if(tmpio>0){
 			target[index++]=tmpio;
-			xx++;
 		}
-		pp->CpuIO.X=xx;
 	}
 }
 
@@ -117,7 +109,7 @@ process* make_process(int Is_random){
 		make_turn(newp,Is_random,newp->cpuBT,newp->IOBT);
 	}
 	return newp;
-
+}
 
 void interrupt_process(process* target,int bywhom,int time){
 	if(bywhom==BYPROCESS||bywhom==BYTQ){

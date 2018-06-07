@@ -1,4 +1,10 @@
 #include "evaluation.h"
+#define FFCFS "./testfile/fcfs.txt"
+#define FNSJF "./testfile/nsjf.txt"
+#define FPSJF "./testfile/psjf.txt"
+#define FNPRI "./testfile/npri.txt"
+#define FPPRI "./testfile/ppri.txt"
+#define FRR "./testfile/rr.txt"
 
 void GanttChart(Result* result){
 	if(result==NULL)printf("fuck1\n");
@@ -21,7 +27,7 @@ void GanttChart(Result* result){
 	printf("%d\n",cur->finishedT);
 }
 
-void WTTT(Result* result){
+void WTTT(Result* result,int Alg){
 	stack* Stack = result->finished;
 	int ttt=0,count=0,twt=0;//total turnaound time, count, total waiting time
 	while(stack_last(Stack)!=NULL){
@@ -35,6 +41,22 @@ void WTTT(Result* result){
 	}
 	printf("\ntotal waiting time :%3d , total turnaround time :%3d\n",twt,ttt);
 	printf("average waiting time :%.1lf , average turnaround time :%.1lf\n",(double)twt/count,(double)ttt/count);
+	FILE *f;
+	if(Alg==1)
+		f=fopen(FFCFS,"at");
+	else if(Alg==2)
+		f=fopen(FNSJF,"at");
+	else if(Alg==3)
+		f=fopen(FPSJF,"at");
+	else if(Alg==4)
+		f=fopen(FNPRI,"at");
+	else if(Alg==5)
+		f=fopen(FPPRI,"at");
+	else
+		f=fopen(FRR,"at");
+
+	fprintf(f,"%lf %lf %lf\n",(double)twt/count,(double)ttt/count,(result->totaltime-result->idle)/(double)result->totaltime);
+	fclose(f);
 }
 
 void CpuUtilization(Result* result){

@@ -1,6 +1,7 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+#define NUMEPISODE 100
 #define BYPROCESS 1
 #define BYIO 0
 #define BYTQ 2
